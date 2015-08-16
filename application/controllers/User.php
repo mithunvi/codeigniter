@@ -9,6 +9,7 @@ class User extends CI_Controller{
 	}
 
 	public function create(){
+        $this->load->helper(array('form', 'url'));
 		$this->load->view('create_user');
 	}
 
@@ -16,11 +17,26 @@ class User extends CI_Controller{
 		$data['name'] = $this->input->post('name');
 		$data['email'] = $this->input->post('email');
 		
-		$this->load->model('user_model');
-		$a = $this->user_model->store($data);
-		if($a){
-			echo 'data successfully inserted';
-		}
+//        $this->load->helper(array('form', 'url'));
+        $this->load->library('form_validation');
+        
+        $this->form_validation->set_rules('name', 'Your Name', 'required');
+        $this->form_validation->set_rules('email', 'Your email', 'required');
+        
+        if ($this->form_validation->run() == FALSE)
+                {
+                      return   $this->load->view('create_user');
+                }
+                else
+                {
+                       $this->load->model('user_model');
+                        $a = $this->user_model->store($data);
+                        if($a){
+                            echo 'data successfully inserted';
+                        } 
+                }
+        
+		
 	}
 
 	public function all_user(){
