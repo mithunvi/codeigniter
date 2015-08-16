@@ -34,5 +34,23 @@ class User extends CI_Controller{
 		$this->user_model->delete($id);
 
 		echo 'data deleted successfully';
+        redirect('user/all_user');
 	}
+    public function update($id){
+        $this->load->model('user_model');
+        $data['user_data'] = $this->user_model->get_user_data($id);
+        $data['id'] = $id;
+        $this->load->view('update', $data);
+    }
+    
+    public function edit($id){
+        $data['name'] = $this->input->post('name');
+		$data['email'] = $this->input->post('email');
+        
+        $this->load->model('user_model');
+        $this->user_model->edit($id, $data);
+        redirect('user/all_user');
+        
+        
+    }
 }
